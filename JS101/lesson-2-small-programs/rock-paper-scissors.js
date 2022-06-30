@@ -1,21 +1,39 @@
 const readline = require('readline-sync');
 const VALID_CHOICES = ['rock', 'paper', 'scissors'];
+const WIN_TABLE = {
+  rock: ['scissors', 'lizard'],
+  paper: ['rock', 'spock'],
+  scissors: ['paper', 'lizard'],
+  spock: ['rock', 'scissors'],
+  lizard: ['paper', 'lizard'],
+};
 
 function prompt(message) {
   console.log(`=> ${message}`);
 }
 
+function checkUseSpockLizard() {
+  prompt("Play with 'spock' and 'lizard'? (y/n)");
+  let useSpockLizard = readline.question().toLowerCase();
+  while (useSpockLizard[0] !== 'y' && useSpockLizard[0] !== 'n') {
+    prompt("Please enter 'y' or 'n'.");
+    useSpockLizard = readline.question().toLowerCase();
+  }
+  return useSpockLizard === 'y';
+}
+
+function engageSpockLizard() {
+  VALID_CHOICES.push('spock');
+  VALID_CHOICES.push('lizard');
+}
+
 function checkWinner(choice, computerChoice) {
-  if ((choice === 'rock' && computerChoice === 'scissors') ||
-    (choice === 'paper' && computerChoice === 'rock') ||
-    (choice === 'scissors' && computerChoice === 'paper')) {
-    return 'player';
-  } else if ((choice === 'rock' && computerChoice === 'paper') ||
-    (choice === 'paper' && computerChoice === 'scissors') ||
-    (choice === 'scissors' && computerChoice === 'rock')) {
-    return 'computer';
-  } else {
+  if (choice === computerChoice) {
     return 'tie';
+  } else if (WIN_TABLE[choice].includes(computerChoice)) {
+    return 'player';
+  } else {
+    return 'computer';
   }
 }
 
@@ -29,9 +47,15 @@ function announceWinner(winnerName) {
   }
 }
 
+prompt("Let's play rock, paper, scissors!");
+
+if (checkUseSpockLizard()) {
+  engageSpockLizard();
+}
+
 while (true) {
   prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
-  let choice = readline.question();
+  let choice = readline.question().toLowerCase();
 
   while (!VALID_CHOICES.includes(choice)) {
     prompt("That's not a valid choice");
