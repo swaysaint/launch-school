@@ -5,9 +5,15 @@
 // Print the result to the terminal.
 
 const readline = require('readline-sync');
-const localStrings = require('./calculator_messages.json');
+const LOCAL_STRINGS = require('./calculator_messages.json');
+let userLanguage = 'en';
 
-function prompt(message) {
+function messages(message, lang) {
+  return LOCAL_STRINGS[lang][message];
+}
+
+function prompt(key) {
+  let message = messages(key, userLanguage);
   console.log(`=> ${message}`);
 }
 
@@ -15,32 +21,46 @@ function invalidNumber(number) {
   return number.trimStart() === '' || Number.isNaN(Number(number));
 }
 
+prompt('askLanguage');
+let language = readline.question();
+
+while (!['1','2'].includes(language)) {
+  prompt('invalidLanguage');
+  language = readline.question();
+}
+
+if (language === '1') {
+  userLanguage = 'en';
+} else if (userLanguage === '2') {
+  userLanguage = 'zh';
+}
+
 let goAgain;
 
-prompt(localStrings.welcome);
+prompt('welcome');
 
 do {
-  prompt(localStrings.askFirstNumber);
+  prompt('askFirstNumber');
   let number1 = readline.question();
 
   while (invalidNumber(number1)) {
-    prompt(localStrings.invalidNumber);
+    prompt('invalidNumber');
     number1 = readline.question();
   }
 
-  prompt(localStrings.askSecondNumber);
+  prompt('askSecondNumber');
   let number2 = readline.question();
 
   while (invalidNumber(number2)) {
-    prompt(localStrings.invalidNumber);
+    prompt(invalidNumber);
     number2 = readline.question();
   }
 
-  prompt(localStrings.askOperation);
+  prompt('askOperation');
   let operation = readline.question();
 
   while (!['1', '2', '3', '4'].includes(operation)) {
-    prompt(localStrings.invalidOperation);
+    prompt('invalidOperation');
     operation = readline.question();
   }
 
@@ -60,12 +80,13 @@ do {
       break;
   }
 
-  prompt(localStrings.result + output + '\n');
-  prompt(localStrings.askPerformAgain);
+  prompt('result');
+  console.log(output);
+  prompt('askPerformAgain');
   let shouldGoAgain = readline.question();
 
   while (!['1','2'].includes(shouldGoAgain)) {
-    prompt(localStrings.invalidPerformAgainn);
+    prompt('invalidPerformAgain');
     shouldGoAgain = readline.question();
   }
 

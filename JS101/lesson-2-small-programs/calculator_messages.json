@@ -1,11 +1,28 @@
 {
-  "welcome": "Welcome to Calculator!",
-  "askFirstNumber": "What's the first number?",
-  "askSecondNumber": "What's the second number?",
-  "askPerformAgain": "Would you like to perform another calculation?\n1) Yes 2) No",
-  "askOperation": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
-  "invalidNumber": "Hmm... that doesn't look like a valid number",
-  "invalidOperation": "Must choose 1, 2, 3, or 4",
-  "invalidPerformAgain": "Must choose 1 or 2",
-  "result": "The result is: "
+  "en": {
+    "askLanguage": "Please choose a language.\n1) English 2)简体中文",
+    "askFirstNumber": "What's the first number?",
+    "askSecondNumber": "What's the second number?",
+    "askPerformAgain": "Would you like to perform another calculation?\n1) Yes 2) No",
+    "askOperation": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+    "invalidLanguage": "Invalid language!",
+    "invalidNumber": "Hmm... that doesn't look like a valid number",
+    "invalidOperation": "Must choose 1, 2, 3, or 4",
+    "invalidPerformAgain": "Must choose 1 or 2",
+    "result": "The result is: ",
+    "welcome": "Welcome to Calculator!"
+  },
+  "zh": {
+    "askLanguage": "请选择语言\n1) English 2)简体中文",
+    "askFirstNumber": "请输入一个数字",
+    "askSecondNumber": "请再输入一个数字",
+    "askPerformAgain": "再来一次吗？\n1）是  2）否",
+    "askOperation": "如何计算呢？\n1）加法  2）减法  3）乘法  4）除法",
+    "invalidLanguage": "非法输入！",
+    "invalidNumber": "哥。。这好像不是数字哦",
+    "invalidOperation": "必须填1、2、3、4",
+    "invalidPerformAgain": "必须填1或2",
+    "result": "结果： ",
+    "welcome": "欢迎来使用超级计算器！"
+  }
 }
