@@ -5,6 +5,7 @@
 // Print the result to the terminal.
 
 const readline = require('readline-sync');
+const localStrings = require('./calculator_messages.json');
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -16,30 +17,30 @@ function invalidNumber(number) {
 
 let goAgain;
 
-prompt('Welcome to Calculator!');
+prompt(localStrings.welcome);
 
 do {
-  prompt("What's the first number?");
+  prompt(localStrings.askFirstNumber);
   let number1 = readline.question();
 
   while (invalidNumber(number1)) {
-    prompt("Hmm... that doesn't look like a valid number");
+    prompt(localStrings.invalidNumber);
     number1 = readline.question();
   }
 
-  prompt("What's the second number?");
+  prompt(localStrings.askSecondNumber);
   let number2 = readline.question();
 
   while (invalidNumber(number2)) {
-    prompt("Hmm... that doesn't look like a valid number.");
+    prompt(localStrings.invalidNumber);
     number2 = readline.question();
   }
 
-  prompt("What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide");
+  prompt(localStrings.askOperation);
   let operation = readline.question();
 
   while (!['1', '2', '3', '4'].includes(operation)) {
-    prompt("Must choose 1, 2, 3, or 4");
+    prompt(localStrings.invalidOperation);
     operation = readline.question();
   }
 
@@ -59,12 +60,12 @@ do {
       break;
   }
 
-  prompt(`The result is ${output}\n`);
-  prompt("Would you like to perform another calculation?\n1) Yes 2) No");
+  prompt(localStrings.result + output + '\n');
+  prompt(localStrings.askPerformAgain);
   let shouldGoAgain = readline.question();
 
   while (!['1','2'].includes(shouldGoAgain)) {
-    prompt("Must choose 1 or 2");
+    prompt(localStrings.invalidPerformAgainn);
     shouldGoAgain = readline.question();
   }
 
