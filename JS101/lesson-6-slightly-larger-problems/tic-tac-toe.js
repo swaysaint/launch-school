@@ -1,11 +1,17 @@
 // Tic-tac-toe by @sway
 // Jul 11, 2022
 
+// To do:
+// - Fix checkMove method redundancy (player & computer)
+
 const readline = require('readline-sync');
 
+const FIRST_MOVE = 'choose';
 const BLANK_SQUARE = ' ';
 const PLAYER_SQUARE = 'X';
 const COMPUTER_SQUARE = 'O';
+const VALID_ROWS = ['1', '2', '3'];
+const VALID_COLS = ['1', '2', '3'];
 const WINNING_LINES = [
   ['1', '2', '3'],
   ['4', '5', '6'],
@@ -29,6 +35,29 @@ function welcome() {
   console.log('******************************');
   prompt('Press any key to begin');
   readline.question();
+}
+
+function determinePlayOrder() {
+  if (FIRST_MOVE === 'player') {
+    return 'player';
+  } else if (FIRST_MOVE === 'computer') {
+    return 'computer';
+  } else {
+    return whoGoesFirst();
+  }
+}
+
+function whoGoesFirst() {
+  prompt('Please choose who moves first');
+  prompt('Enter "p" for player or "c" for computer:');
+  let choice = String(readline.question());
+  while (choice !== 'p' && choice !== 'c') {
+    prompt ('Invalid choice. Enter "p" for player or "c" for computer');
+    choice = String(readline.question());
+  }
+  if (choice === 'p') {
+    return 'player';
+  } else return 'computer';
 }
 
 function initializeBoard() {
@@ -56,12 +85,32 @@ function displayBoard(board, message = '') {
   console.log('     |     |');
 }
 
-function checkMove(board, move) {
+function getPlayerPositions(board) {
+  return Object.keys(board).filter(key => board[key] === PLAYER_SQUARE);
+}
+
+function getComputerPositions(board) {
+  return Object.keys(board).filter(key => board[key] === COMPUTER_SQUARE);
+}
+
+function getValidSquares(board) {
+  return Object.keys(board).filter(key => board[key] === BLANK_SQUARE);
+}
+
+function getMiddleSquare(board) {
+  return String(Math.ceil(Object.keys(board).length / 2));
+}
+
+function middleOpen(board) {
+  return board[getMiddleSquare(board)] === BLANK_SQUARE;
+}
+
+function checkValidMove(board, move) {
   return board[move] !== BLANK_SQUARE;
 }
 
 function chooseRow() {
-  const validRows = ['1', '2', '3'];
+  let validRows = VALID_ROWS.slice();
   prompt('Please enter the row (1, 2, or 3):');
   let row = readline.question().trim();
   while (!validRows.includes(row)) {
@@ -72,7 +121,7 @@ function chooseRow() {
 }
 
 function chooseCol() {
-  const validCols = ['1', '2', '3'];
+  let validCols = VALID_COLS.slice();
   prompt('Please enter the column (1, 2, or 3):');
   let col = readline.question().trim();
   while (!validCols.includes(col)) {
@@ -81,7 +130,7 @@ function chooseCol() {
   }
   return col;
 }
-
+// Will need to update for bigger boards
 function choiceToSquare(row, col) {
   if (row === '1') {
     return String(col);
@@ -93,18 +142,9 @@ function choiceToSquare(row, col) {
 }
 
 function chooseRandomSquare(board) {
-  let validSquares = Object.keys(board)
-    .filter(key => board[key] === BLANK_SQUARE);
+  let validSquares = getValidSquares(board);
   let randomIndex = Math.floor(Math.random() * validSquares.length);
   return String(validSquares[randomIndex]);
-}
-
-function getPlayerPositions(board) {
-  return Object.keys(board).filter(key => board[key] === PLAYER_SQUARE);
-}
-
-function getComputerPositions(board) {
-  return Object.keys(board).filter(key => board[key] === COMPUTER_SQUARE);
 }
 
 function playerChoice(board) {
@@ -121,8 +161,26 @@ function playerChoice(board) {
     let playerChoice = {row: chooseRow(), col: chooseCol()};
     playerSquare = choiceToSquare(playerChoice.row, playerChoice.col);
     attempt++;
-  } while (checkMove(board, playerSquare));
+  } while (checkValidMove(board, playerSquare));
   board[playerSquare] = PLAYER_SQUARE;
+}
+
+function computerChoice(board) {
+  let computerSquare;
+  let aiOffense = computerOffense(board);
+  let aiDefense = computerDefense(board);
+  if (aiOffense.moveExists === true) {
+    computerSquare = aiOffense.square;
+  } else if (aiOffense.moveExists === false && aiDefense.moveExists === true) {
+    computerSquare = aiDefense.square;
+  } else if (aiOffense.moveExists === false && aiDefense.moveExists === false &&
+    middleOpen(board)
+  ) {
+    computerSquare = getMiddleSquare(board);
+  } else {
+    computerSquare = chooseRandomSquare(board);
+  }
+  board[computerSquare] = COMPUTER_SQUARE;
 }
 
 function findLineBlocker(board, line) {
@@ -201,9 +259,9 @@ function computerDefense(board) {
   let imminentLosses = checkImminentLosses(board);
   let randomIndex = Math.floor(Math.random() * imminentLosses.length);
   if (imminentLosses.length > 0) {
-    return { move: true, square: imminentLosses[randomIndex] };
+    return { moveExists: true, square: imminentLosses[randomIndex] };
   } else {
-    return { move: false };
+    return { moveExists: false };
   }
 }
 
@@ -211,30 +269,12 @@ function computerOffense(board) {
   let imminentWins = checkImminentWins(board);
   let randomIndex = Math.floor(Math.random() * imminentWins.length);
   if (imminentWins.length > 0) {
-    return { move: true, square: imminentWins[randomIndex] };
+    return { moveExists: true, square: imminentWins[randomIndex] };
   } else {
-    return { move: false };
+    return { moveExists: false };
   }
 }
-
-function computerChoice(board) {
-  let computerSquare;
-  let aiOffense = computerOffense(board);
-  let aiDefense = computerDefense(board);
-  if (aiOffense.move === true) {
-    computerSquare = aiOffense.square;
-  } else if (aiOffense.move === false && aiDefense.move === true) {
-    computerSquare = aiDefense.square;
-  } else if (aiOffense. move === false && aiDefense.move === false &&
-    board['5'] === BLANK_SQUARE
-  ) {
-    computerSquare = '5';
-  } else {
-    computerSquare = chooseRandomSquare(board);
-  }
-  board[computerSquare] = COMPUTER_SQUARE;
-}
-
+// Need to rewrite for bigger boards
 function checkForWinner(board) {
   let winner = 'none';
   for (let line = 0; line < WINNING_LINES.length; line++) {
@@ -280,11 +320,16 @@ function checkContinueGame() {
 
 function playGame() {
   welcome();
+  let firstMover = determinePlayOrder();
   let board = initializeBoard();
   while (true) {
-    playerChoice(board);
+    if (firstMover === 'player') {
+      playerChoice(board);
+    } else computerChoice(board);
     if (checkForWinner(board) !== 'none' || checkForTie(board)) break;
-    computerChoice(board);
+    if (firstMover === 'player') {
+      computerChoice(board);
+    } else playerChoice(board);
     if (checkForWinner(board) !== 'none' || checkForTie(board)) break;
   }
   let winner = checkForWinner(board);
@@ -301,6 +346,7 @@ function ticTacToe() {
       score.computer >= GAMES_NEEDED_TO_WIN) {
       console.log('Match Over! The final score is:');
       console.log(`Player: ${score.player}, Computer: ${score.computer}`);
+      console.log(`${score.player > score.computer ? 'PLAYER' : 'COMPUTER'} WINS!`);
       score.player = 0;
       score.computer = 0;
       console.log('Score reset!!!');
