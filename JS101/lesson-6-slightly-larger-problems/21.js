@@ -1,6 +1,8 @@
 const readline = require('readline-sync');
 const COLOR = require('cli-color');
 
+const GAME_TYPE = 21; // Can be changed to play 31, 41, 51, etc.
+const DEALER_STAY_ON = GAME_TYPE - 4;
 const SPADE_ICON = '\u2660';
 const HEART_ICON = '\u2665';
 const DIAMOND_ICON = '\u2666';
@@ -45,7 +47,7 @@ function shuffleDeck(deck) {
 function welcome() {
   console.clear();
   console.log('******************************');
-  console.log('*** Welcome to Simple 21!! ***');
+  console.log(`*** Welcome to Simple ${GAME_TYPE}!! ***`);
   console.log('******************************');
   prompt('Press any key to begin');
   readline.question();
@@ -124,7 +126,7 @@ function getHandValue(hand) {
       handValue += 1;
     }
     for (let index = 0; index < aces.length; index++) {
-      if (handValue + 10 <= 21) {
+      if (handValue + 10 <= GAME_TYPE) {
         handValue += 10;
       }
     }
@@ -170,7 +172,7 @@ function displayOpenClosedCards(card) {
 function displayClosedTable(playerHand, dealerHand) {
   console.clear();
   console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-  console.log('&                          WELCOME TO 21                         &');
+  console.log(`&                          WELCOME TO ${GAME_TYPE}                         &`);
   console.log('&                                                                &');
   console.log(`&                          Dealer Has ${getSimpleCardValue(dealerHand[0])}` + `${getSimpleCardValue(dealerHand[0]) >= 10 ? '' : ' '}` + '                         &');
   displayOpenClosedCards(dealerHand[0]);
@@ -243,15 +245,15 @@ function checkMove() {
 }
 
 function checkBust(hand) {
-  return getHandValue(hand) > 21;
+  return getHandValue(hand) > GAME_TYPE;
 }
 
 function checkBlackJack(hand) {
-  return getHandValue(hand) === 21;
+  return getHandValue(hand) === GAME_TYPE;
 }
 
 function check17(hand) {
-  return getHandValue(hand) >= 17;
+  return getHandValue(hand) >= DEALER_STAY_ON;
 }
 
 function hit(deck, hand) {
@@ -287,8 +289,8 @@ function dealerMove(deck, hand) {
     console.log("Dealer's Hand:");
     printHand(hand);
     console.log(`Dealer has ${getHandValue(hand)}`);
-    if (getHandValue(hand) === 21) console.log('Dealer Blackjack!');
-    else if (getHandValue(hand) >= 17) console.log(`Dealer has ${getHandValue(hand)}`);
+    if (getHandValue(hand) === GAME_TYPE) console.log('Dealer Blackjack!');
+    else if (getHandValue(hand) >= DEALER_STAY_ON) console.log(`Dealer has ${getHandValue(hand)}`);
     else {
       sleep(2000);
       dealCard(deck, hand);
