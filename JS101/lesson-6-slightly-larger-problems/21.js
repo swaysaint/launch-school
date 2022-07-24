@@ -337,6 +337,7 @@ function playHand(deck) {
   displayClosedTable(playerHand, dealerHand);
   if (checkBlackJack(playerHand)) {
     console.log('Blackjack! You Win!');
+    sleep(3000);
   } else {
     sleep(3000);
     console.clear();
