@@ -1,0 +1,120 @@
+/*
+*****
+A function that returns the sum of two numbers
+*****
+
+START
+
+# Function given two integers called 'number1' and 'number2'
+
+Return number1 + number2
+
+END
+*/
+
+/*
+*****
+A function that takes an array of strings, and returns a string that is all
+those strings concatenated together
+*****
+
+START
+
+# Function given an array of strings 'stringArray'
+
+Join the array of strings (with ' ' as a separator)
+
+Return the new string
+
+END
+*/
+
+/*
+*****
+A method that takes an array of integers, and returns a new array with
+every other element from the original array, starting with the first element:
+For instance: everyOther([1,4,7,2,5]) should return [1,6,5].
+*****
+
+START
+
+# A function everyOther that takes an array of integers intArray
+
+SET everyOtherElement = []
+SET iterator = 0
+
+WHILE iterator < array length
+
+Push array value to everyOtherElement
+
+iterator = iterator + 2
+
+Return everyOtherElement
+
+END
+*/
+
+/*
+*****
+A function that determines the index of the 3rd occurrence of a given
+character in a string. For instance, if the given character is 'x' and the
+string is 'axbxcdxex', the function should return 6 (the index of the 3rd 'x').
+If the given character does not occur at least 3 times, return null.
+*****
+
+START
+
+# A function that takes a string searchString and string searchValue
+
+SET iterator = 0
+SET valueCount = 0
+SET thirdValuePos = 0
+
+WHILE iterator < searchString length
+IF character === searchValue increment valueCount
+IF valueCount === 3 SET thirdValuePos = iterator
+
+IF thirdValuePos > 0 return thirdValuePos
+ELSE return null
+
+END
+*/
+
+/*
+*****
+A function that takes two arrays of numbers and returns the results of merging
+the arrays. The elements of the first array should become the elements at the
+even indexes of the returned array, while the elements of the second array
+should become the elements at the odd indexes. For instance:
+merge([1, 2, 3], [4, 5, 6]); // => [1, 4, 2, 5, 3, 6]
+*****
+
+START
+
+# A function 'merge' that takes two arrays 'arr1' and 'arr2'
+
+SET mergedArray length as the sum of the length of arr1 and arr2
+
+SET iterator = 0
+SET arrayLoc = 0
+
+WHILE iterator < arr1 length
+Push arr1 iterated value to mergedArray at arrayLoc position
+iterator = iterator + 1
+arrayLoc = arrayLoc + 2
+
+SET iterator = 0
+set arrayLoc = 1
+WHILE iterator < arr2 length
+Push arr2 iterated value to mergedArray at arrayLoc position
+iterator = iterator + 1
+arrayLoc = arrayLoc + 2
+
+Return mergedArray
+
+END
+*/
+
+
+
+
